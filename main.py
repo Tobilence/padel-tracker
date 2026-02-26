@@ -3,13 +3,13 @@ from ultralytics import YOLO
 import supervision as sv
 
 # Load model
-model = YOLO("yolo11n.pt")
+model = YOLO("experiments/exp1/runs/detect/experiments/padel_training/logs/padel_custom/weights/best.pt")
 
 # Tracker
 tracker = sv.ByteTrack()
 
 # Video
-cap = cv2.VideoCapture("video.mp4")
+cap = cv2.VideoCapture("data/video.mp4")
 
 while True:
     ret, frame = cap.read()
@@ -21,7 +21,7 @@ while True:
     detections = sv.Detections.from_ultralytics(result)
 
     # keep only persons
-    detections = detections[detections.class_id == 0]
+    detections = detections[detections.class_id == 1]
 
     # ---- Tracking ----
     tracks = tracker.update_with_detections(detections)
