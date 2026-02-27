@@ -9,4 +9,4 @@ class YOLODetector:
     def detect(self, frame):
         result = self.model(frame)[0]
         det = sv.Detections.from_ultralytics(result)
-        return det[det.class_id == 0]
+        return det

@@ -37,6 +37,10 @@ class PadelTrackingPipeline:
             frame = draw_tracks(frame, tracks)
 
             cv2.imshow("Padel Tracking", frame)
+            if cv2.waitKey(1) & 0xFF == ord("q"):
+                break
+            
+            # temp: debug slowdown
             frame_count += 1
 
             if frame_count > 500:

@@ -24,7 +24,7 @@ class ByteTrackPlayerTracker:
         """
         # Only update if there are detections
         if len(detections) == 0:
-            return sv.Detections(xyxy=[], tracker_id=[]) # type: ignore
+            return detections
 
         # Update tracker
         tracks = self.tracker.update_with_detections(detections)

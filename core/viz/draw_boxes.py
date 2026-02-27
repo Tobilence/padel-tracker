@@ -5,6 +5,9 @@ def draw_tracks(frame, tracks):
     """
     Draws bounding boxes and ID labels onto the frame based on tracker results.
     """
+    if len(tracks) == 0:
+        return frame
+
     for box, track_id in zip(tracks.xyxy, tracks.tracker_id):
         # Convert coordinates to integers for OpenCV
         x1, y1, x2, y2 = map(int, box)

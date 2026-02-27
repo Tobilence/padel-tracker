@@ -10,7 +10,6 @@ val: images/val
 # number of classes
 nc: 2
 
-# class names (EDIT THIS)
 names:
   0: Player
   1: PadelBall
