@@ -9,7 +9,7 @@ PLAYER_CLASS_ID = 1
 @dataclass
 class Player:
     id: int
-    latest_xyxy: List[float]
+    latest_xyxy: np.ndarray
     tracker_id: int
     embedding: np.ndarray
 
@@ -61,8 +61,8 @@ class IdentityManager:
                 a_index = match["a_index"]
                 b_index = match["b_index"]
                 input_detection = detected_players[b_index]
-                self.players[a_index].latest_xyxy = input_detection.xyxy
-                self.players[a_index].track_id = input_detection.tracker_id
+                self.players[a_index].latest_xyxy = input_detection.xyxy[0]
+                self.players[a_index].tracker_id = input_detection.tracker_id[0]
         else:
             raise Exception("Bad State: must have 0 or 4 players.")
 

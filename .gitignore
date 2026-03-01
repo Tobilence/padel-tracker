@@ -26,3 +26,6 @@ data/
 .DS_Store
 
 runs/
+
+# models
+*.pt

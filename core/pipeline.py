@@ -1,8 +1,7 @@
-from core.detection import Detector, YOLODetector
-from core.tracking import PlayerTracker, ByteTrackPlayerTracker
+from core.detection import YOLODetector
+from core.tracking import ByteTrackPlayerTracker
 from core.identity import OSNetReIDEmbeddingModel, IdentityManager
 from core.viz import vizualize_players
-import time
 import cv2
 
 class PadelTrackingPipeline:
@@ -11,8 +10,10 @@ class PadelTrackingPipeline:
         self.detector = YOLODetector(model_path="models/yolo-best-n.pt")
         self.tracker = ByteTrackPlayerTracker()
         self.identity_manager = IdentityManager(OSNetReIDEmbeddingModel())
-
         self.cap = cv2.VideoCapture(video_path)
+
+        self.cap.set(cv2.CAP_PROP_POS_FRAMES, 2000)
+
 
     def run(self):
 
