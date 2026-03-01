@@ -15,7 +15,6 @@ class Player:
 
 
 class IdentityManager:
-
     def __init__(self, embedding_model: ReIdEmbeddingModel) -> None:
         # stores all 4 players with embeddings
         self.players: List[Player] = []

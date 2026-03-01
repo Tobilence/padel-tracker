@@ -28,7 +28,7 @@ def hungarian_cosine_match(list_a: Sequence[EmbeddingLike], list_b: Sequence[Emb
         ]
     """
 
-    if len(self.list_a) == 0 or len(list_b) == 0:
+    if len(list_a) == 0 or len(list_b) == 0:
         return []
 
     A = np.asarray(list_a, dtype=float)
