@@ -1,13 +1,15 @@
 import torch
-from torchreid.models import build_model # type: ignore
+import torchreid
+import cv2 
+import numpy as np
 from torchvision import transforms
 from PIL import Image
 
-class OSNetReID:
+class OSNetReIDEmbeddingModel:
 
-    def __init__(self, device="cuda"):
+    def __init__(self, device="mps"):
         self.device = device
-        self.model = build_model(
+        self.model = torchreid.models.build_model(
             name='osnet_x1_0',
             num_classes=1000,  # not used for embeddings
             pretrained=True,
@@ -32,11 +34,16 @@ class OSNetReID:
         Returns:
             embedding: torch tensor, shape [1, feature_dim]
         """
+         # Convert numpy frame → PIL
+        if isinstance(frame, np.ndarray):
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = Image.fromarray(frame)
+
         x1, y1, x2, y2 = map(int, box)
         person_crop = frame.crop((x1, y1, x2, y2))
         tensor = self.transform(person_crop).unsqueeze(0).to(self.device)
 
         with torch.no_grad():
             emb = self.model(tensor)
-            emb = torch.nn.functional.normalize(emb, p=2, dim=1)
+            emb = torch.nn.functional.normalize(emb, p=2, dim=1).squeeze(0)
         return emb

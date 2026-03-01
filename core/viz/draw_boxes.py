@@ -1,4 +1,6 @@
 import cv2 
+from typing import List
+from core.identity import Player
 
 
 def draw_tracks(frame, tracks):
@@ -27,3 +29,33 @@ def draw_tracks(frame, tracks):
         )
     
     return frame
+
+
+def vizualize_players(frame, players: List[Player]):
+    """
+    Draws bounding boxes and ID labels onto the frame based on tracker results.
+    """
+    if len(players) == 0:
+        return frame
+
+    for player in players:
+        # Convert coordinates to integers for OpenCV
+        x1, y1, x2, y2 = map(int, player.latest_xyxy)
+
+        # Draw the Bounding Box (Green, thickness 2)
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+        # Draw the ID Label slightly above the box
+        cv2.putText(
+            frame, 
+            f"ID {player.id} - {player.track_id}", 
+            (x1, y1 - 10), 
+            cv2.FONT_HERSHEY_SIMPLEX, 
+            0.8, 
+            (0, 255, 0), 
+            2
+        )
+    
+    return frame
+
+

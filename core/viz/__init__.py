@@ -1,1 +1,1 @@
-from .draw_boxes import draw_tracks
+from .draw_boxes import vizualize_players
