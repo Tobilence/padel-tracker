@@ -14,28 +14,32 @@ class PadelTrackingPipeline:
 
         self.cap.set(cv2.CAP_PROP_POS_FRAMES, 2000)
 
-
     def run(self):
-
-        frame_count = 0
         while True:
-
             ret, frame = self.cap.read()
             if not ret:
-                break
+                return
 
-            detections = self.detector.detect(frame)
-            tracks = self.tracker.update(detections)
-            self.identity_manager.update(frame, tracks)
+            self._handle_frame(frame)
 
-            frame = vizualize_players(frame, self.identity_manager.players)
-
-            cv2.imshow("Padel Tracking", frame)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
-            
-            # temp: debug slowdown
-            # frame_count += 1
 
-            # if frame_count > 500:
-            #     time.sleep(5)
+    def sample_frame(self):
+        ret, frame = self.cap.read()
+        if not ret:
+            return
+
+        self._handle_frame(frame)
+        return frame
+    
+    def _handle_frame(self, frame):
+        detections = self.detector.detect(frame)
+        tracks = self.tracker.update(detections)
+        self.identity_manager.update(frame, tracks)
+
+        # frame = vizualize_players(frame, self.identity_manager.players)
+
+        cv2.imshow("Padel Tracking", frame)
+    
+
