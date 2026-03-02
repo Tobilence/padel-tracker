@@ -11,15 +11,23 @@ class CourtVizualizer:
             self,
             # source_grounding_points: List[List[Union[float, int]]]   <- this will later be detected by model
     ) -> None:
-        # Source is hardcoded for now.
+        # Source is hardcoded for now
         LEFT_LOWER_NET = [90, 220]
         RIGHT_LOWER_NET = [540, 225]
         BOTTOM_T_LINE = [315, 340]
         TOP_T_LINE = [317, 190]
-        self.src_grounding_points = [LEFT_LOWER_NET, RIGHT_LOWER_NET, BOTTOM_T_LINE, TOP_T_LINE]
+        self.src_grounding_points = np.array([
+            LEFT_LOWER_NET,
+            RIGHT_LOWER_NET,
+            BOTTOM_T_LINE,
+            TOP_T_LINE
+        ])
 
+    def vizualize_players_on_court(self, player_bboxes, flip_court=True):
+        M = self._get_birdseye_matrix(flip_court=flip_court)
+        return self._vizualize_court(player_bboxes, M)
 
-    def _get_birdseye_matrix(self, src_points, flip_court=True):
+    def _get_birdseye_matrix(self, flip_court=True):
         """
         src_points: [left_net (lower end), right_net (lower end), near_T, far_T]
         flip_court: flip court on x axis
@@ -37,7 +45,7 @@ class CourtVizualizer:
             court_length = PADEL_COURT_LENGTH
             dst_pts[:,1] = court_length - dst_pts[:,1]
 
-        matrix, _ = cv2.findHomography(src_points, dst_pts)
+        matrix, _ = cv2.findHomography(self.src_grounding_points, dst_pts)
         return matrix
         
     def _draw_2d_court(self, scale=40):
@@ -70,14 +78,14 @@ class CourtVizualizer:
 
         return court
 
-    def vizualize_court(self, frame, player_coords, matrix):
+    def _vizualize_court(self, player_coords, matrix):
         """
         player_coords: List of 4 bounding boxes [[x1, y1, x2, y2], ...]
         matrix: The 3x3 Homography matrix calculated earlier
         """
         # 1. Create the 2D canvas (using the previous draw function)
         scale = 40 # 1 meter = 40 pixels
-        view_2d = self._draw_2d_court(scale) 
+        view_2d = self._draw_2d_court() 
         
         # Define colors for the 4 players to tell them apart
         colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
@@ -108,9 +116,5 @@ class CourtVizualizer:
             cv2.circle(view_2d, (draw_x, draw_y), 10, colors[i], -1)
             cv2.putText(view_2d, f"P{i+1}", (draw_x + 12, draw_y), 
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-            
-            # 5. Draw on original frame (Visual Verification)
-            cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), colors[i], 2)
-            cv2.circle(frame, (int(feet_x), int(feet_y)), 6, (255, 255, 255), -1)
 
         return view_2d

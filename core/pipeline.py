@@ -1,7 +1,7 @@
 from core.detection import YOLODetector
 from core.tracking import ByteTrackPlayerTracker
 from core.identity import OSNetReIDEmbeddingModel, IdentityManager
-from core.viz import vizualize_players
+from core.viz import vizualize_players, CourtVizualizer
 import cv2
 
 class PadelTrackingPipeline:
@@ -10,8 +10,9 @@ class PadelTrackingPipeline:
         self.detector = YOLODetector(model_path="models/yolo-best-n.pt")
         self.tracker = ByteTrackPlayerTracker()
         self.identity_manager = IdentityManager(OSNetReIDEmbeddingModel())
-        self.cap = cv2.VideoCapture(video_path)
+        self.court_viz = CourtVizualizer()
 
+        self.cap = cv2.VideoCapture(video_path)
         self.cap.set(cv2.CAP_PROP_POS_FRAMES, 2000)
 
     def run(self):
@@ -38,8 +39,10 @@ class PadelTrackingPipeline:
         tracks = self.tracker.update(detections)
         self.identity_manager.update(frame, tracks)
 
-        # frame = vizualize_players(frame, self.identity_manager.players)
+        frame_with_players = vizualize_players(frame.copy(), self.identity_manager.players)
+        court_viz = self.court_viz.vizualize_players_on_court(self.identity_manager.player_xyxy)
 
-        cv2.imshow("Padel Tracking", frame)
+        cv2.imshow("Padel Tracking", frame_with_players)
+        cv2.imshow("Court Live", court_viz)
     
 

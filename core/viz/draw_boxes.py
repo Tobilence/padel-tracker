@@ -40,7 +40,6 @@ def vizualize_players(frame, players: List[Player]):
 
     for player in players:
         # Convert coordinates to integers for OpenCV
-        print("XYXY", player.latest_xyxy)
         x1, y1, x2, y2 = player.latest_xyxy.astype(int)
 
         # Draw the Bounding Box (Green, thickness 2)

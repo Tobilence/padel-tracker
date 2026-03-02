@@ -24,6 +24,10 @@ class IdentityManager:
     def player_embeddings(self):
         return [player.embedding for player in self.players]
 
+    @property
+    def player_xyxy(self):
+        return [player.latest_xyxy for player in self.players]
+
     def update(self, frame, detections):
         """
         if len(self.players) == 0:
