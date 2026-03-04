@@ -49,7 +49,7 @@ class CourtVizualizer:
         player_coords: List of 4 bounding boxes [[x1, y1, x2, y2], ...]
         matrix: The 3x3 Homography matrix calculated earlier
         """
-        # 1. Create the 2D canvas
+        # Create the 2D canvas
         scale = 20  # defines how many pixels will represent 1 meter: eg 20 -> 1 meter=20 pixels
         view_2d = self._draw_2d_court() 
         
@@ -64,7 +64,7 @@ class CourtVizualizer:
             draw_x = np.clip(draw_x, 0, view_2d.shape[1] - 1)
             draw_y = np.clip(draw_y, 0, view_2d.shape[0] - 1)
             
-            # 4. Draw on 2D map
+            # Draw on 2D map
             cv2.circle(view_2d,
                        (draw_x, draw_y),
                        10,
