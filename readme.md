@@ -15,7 +15,3 @@ Work in progress padel analytics pipeline for tracking players across match foot
 - **Detection:** YOLO fine-tuned for padel-player detection
 - **Re-identification:** OSNet-based player re-ID to keep identities consistent
 - **Pipeline goal:** robust player tracking in real match scenarios
-
-## Status
-
-This project is still a work in progress. Results are promising, and the next steps are improving robustness, reducing ID switches, and expanding evaluation across more videos.
