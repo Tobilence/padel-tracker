@@ -1,6 +1,6 @@
 import cv2 
 from typing import List
-from core.identity import Player
+from core.logic import Player
 
 
 def draw_tracks(frame, tracks):
@@ -43,7 +43,7 @@ def vizualize_players(frame, players: List[Player]):
         x1, y1, x2, y2 = player.latest_xyxy.astype(int)
 
         # Draw the Bounding Box (Green, thickness 2)
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.rectangle(frame, (x1, y1), (x2, y2), player.viz_color, 2)
 
         # Draw the ID Label slightly above the box
         cv2.putText(
@@ -52,7 +52,7 @@ def vizualize_players(frame, players: List[Player]):
             (x1, y1 - 10), 
             cv2.FONT_HERSHEY_SIMPLEX, 
             0.8, 
-            (0, 255, 0), 
+            player.viz_color, 
             2
         )
     

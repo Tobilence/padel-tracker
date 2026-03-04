@@ -1,0 +1,15 @@
+# =========================
+# DATASET CONFIG
+# =========================
+
+path: data
+
+train: images/train
+val: images/val
+
+# number of classes
+nc: 2
+
+names:
+  0: Player
+  1: PadelBall

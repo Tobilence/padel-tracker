@@ -1,2 +1,2 @@
 from .draw_boxes import vizualize_players
-from .court import CourtVizualizer
+from .courtviz import CourtVizualizer

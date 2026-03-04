@@ -86,6 +86,6 @@ def prepare_yolo_dataset(
 
 if __name__ == "__main__":
     prepare_yolo_dataset(
-        data_dir="../data/yolo-labels-40img",
+        data_dir="../experiments/exp2/data",
         train_ratio=0.8  
     )
